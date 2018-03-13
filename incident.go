@@ -13,12 +13,38 @@ type Incident struct {
 	ID      int    `json:"id"`
 	Name    string `json:"name"`
 	Message string `json:"message"`
-	Status  int    `json:"status"`
+	Status  int    `json:"status,string"`
 	Visible int    `json"visible"`
 	Notify  bool   `json:"notify"`
 
-	ComponentID     int `json:"component_id"`
+	ComponentID     int `json:"component_id,string"`
 	ComponentStatus int `json:"component_status"`
+}
+
+
+func (mon *AbstractMonitor) Get(cfg *CachetMonitor) (*Incident, error) {
+
+	requestType := "GET"
+	requestURL := fmt.Sprintf("/incidents?component_id=%d", mon.ComponentID)
+	_, body, err := cfg.API.NewRequest(requestType, requestURL, nil)
+	if err != nil {
+		return nil, err
+	}
+	data := make([]Incident,0)
+	if err := json.Unmarshal(body.Data, &data); err != nil {
+		return nil, fmt.Errorf("Cannot parse incident body: %v, %v", err, string(body.Data))
+	}
+	openIncidents := make([]Incident, 0)
+	for _, i := range data {
+		if i.Status < 4 {
+			openIncidents = append(openIncidents, i)
+		}
+	}
+	if len(openIncidents) == 0 {
+		return nil, nil
+	}
+	return &openIncidents[0], nil
+
 }
 
 // Send - Create or Update incident
