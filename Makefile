@@ -15,7 +15,7 @@ OUTPUT_DIR=./bin
 LDFLAGS = -ldflags "-X main.VERSION=${VERSION} -X main.COMMIT=${COMMIT} -X main.BRANCH=${BRANCH}"
 
 # Build the project
-all: clean linux darwin
+all: clean linux darwin docker
 
 linux:
 	GOOS=linux GOARCH=${GOARCH} go build ${LDFLAGS} -o ${OUTPUT_DIR}/${BINARY}-linux-${GOARCH} .
@@ -25,9 +25,6 @@ darwin:
 
 fmt:
 	go fmt $$(go list ./... | grep -v /vendor/)
-
-docker:
-
 
 clean:
 	-rm -f ${BINARY}-*
