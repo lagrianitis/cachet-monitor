@@ -1,0 +1,3 @@
+#!/usr/bin/with-contenv sh
+
+cachet-monitor -c /etc/monitoring/cachet-monitor.yaml
