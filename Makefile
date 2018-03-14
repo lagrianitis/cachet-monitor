@@ -18,10 +18,10 @@ LDFLAGS = -ldflags "-X main.VERSION=${VERSION} -X main.COMMIT=${COMMIT} -X main.
 all: clean linux darwin docker
 
 linux:
-	GOOS=linux GOARCH=${GOARCH} go build ${LDFLAGS} -o ${OUTPUT_DIR}/${BINARY}-linux-${GOARCH} .
+	GOOS=linux GOARCH=${GOARCH} go build ${LDFLAGS} -o ${OUTPUT_DIR}/${BINARY}-linux-${GOARCH} cli/main.go
 
 darwin:
-	GOOS=darwin GOARCH=${GOARCH} go build ${LDFLAGS} -o ${OUTPUT_DIR}/${BINARY}-darwin-${GOARCH} .
+	GOOS=darwin GOARCH=${GOARCH} go build ${LDFLAGS} -o ${OUTPUT_DIR}/${BINARY}-darwin-${GOARCH} cli/main.go
 
 fmt:
 	go fmt $$(go list ./... | grep -v /vendor/)

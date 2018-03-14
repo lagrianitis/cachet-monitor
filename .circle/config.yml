@@ -1,0 +1,24 @@
+version: 2
+jobs:
+  build:
+    machine: true
+    working_directory: ~/cm
+    steps:
+      - checkout
+      - run: make all
+      - run: docker login -u $DOCKER_USER -p $DOCKER_PASS
+      - run: docker build -t tausendkind/cachet:monitor-$CIRCLE_SHA1 .
+      - run: docker push tausendkind/cachet:monitor-$CIRCLE_SHA1
+      - run:
+          name: Install deploy stuff
+          command: |
+            curl -LO https://storage.googleapis.com/kubernetes-release/release/$(curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt)/bin/linux/amd64/kubectl
+            chmod +x ./kubectl
+            sudo mv ./kubectl /usr/local/bin/
+            wget -O kops https://github.com/kubernetes/kops/releases/download/$(curl -s https://api.github.com/repos/kubernetes/kops/releases/latest | grep tag_name | cut -d '"' -f 4)/kops-linux-amd64
+            chmod +x ./kops
+            sudo mv ./kops /usr/local/bin/
+            kops export kubecfg internal.tkd-services.net
+      - deploy:
+          command: |
+            kubectl -n tools set image deployment/cachet-monitor cachet-monitor=tausendkind/cachet:monitor-$CIRCLE_SHA1
