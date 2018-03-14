@@ -14,7 +14,7 @@ import (
 	"gopkg.in/yaml.v2"
 	"github.com/mitchellh/mapstructure"
 
-	cachet "aberfeldy/cachet-monitor"
+	cachet "github.com/aberfeldy/cachet-monitor"
 
 	docopt "github.com/docopt/docopt-go"
 
