@@ -3,6 +3,9 @@ package main
 import (
 	"encoding/json"
 	"errors"
+	"github.com/Sirupsen/logrus"
+	"github.com/mitchellh/mapstructure"
+	"gopkg.in/yaml.v2"
 	"io/ioutil"
 	"net/http"
 	"net/url"
@@ -10,20 +13,16 @@ import (
 	"os/signal"
 	"strings"
 	"sync"
-	"github.com/Sirupsen/logrus"
-	"gopkg.in/yaml.v2"
-	"github.com/mitchellh/mapstructure"
 
 	cachet "github.com/lagrianitis/cachet-monitor"
 
 	docopt "github.com/docopt/docopt-go"
-
 )
 
 const usage = `cachet-monitor
 
 Usage:
-  cachet-monitor (-c PATH | --config PATH) [--log=LOGPATH] [--name=NAME] [--immediate]
+  cachet-monitor (-c PATH | --config PATH) [--log=LOGPATH] [--name=NAME] [--immediate] [--restarted]
   cachet-monitor -h | --help | --version
 
 Arguments:
@@ -61,7 +60,7 @@ func main() {
 		cfg.Immediate = immediate.(bool)
 	}
 
-	if restarted, ok := arguments["--restarted"]; ok{
+	if restarted, ok := arguments["--restarted"]; ok {
 		cfg.Restarted = restarted.(bool)
 	}
 

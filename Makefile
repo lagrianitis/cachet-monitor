@@ -5,7 +5,7 @@
 BINARY = cachet-monitor
 GOARCH = amd64
 
-VERSION=1.0
+VERSION=3.0
 COMMIT=$(shell git rev-parse HEAD)
 BRANCH=$(shell git rev-parse --abbrev-ref HEAD)
 
@@ -27,6 +27,8 @@ fmt:
 	go fmt $$(go list ./... | grep -v /vendor/)
 
 clean:
-	-rm -f ${BINARY}-*
+	rm -rf ${BINARY}-*
 
-.PHONY: linux darwin fmt clean
+docker:
+	docker build . -t cachet-monitor:${VERSION}
+.PHONY: linux darwin fmt clean docker

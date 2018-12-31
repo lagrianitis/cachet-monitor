@@ -33,7 +33,7 @@ func (api CachetAPI) Ping() error {
 		return errors.New("API Responded with non-200 status code")
 	}
 
-        defer resp.Body.Close()
+	defer resp.Body.Close()
 
 	return nil
 }
@@ -52,7 +52,7 @@ func (api CachetAPI) SendMetric(id int, lag int64) {
 		logrus.Warnf("Could not log metric! ID: %d, err: %v", id, err)
 	}
 
-        defer resp.Body.Close()
+	defer resp.Body.Close()
 }
 
 // TODO: test
@@ -79,7 +79,7 @@ func (api CachetAPI) NewRequest(requestType, url string, reqBody []byte) (*http.
 	}
 	err = json.NewDecoder(res.Body).Decode(&body)
 
-        defer req.Body.Close()
+	defer req.Body.Close()
 
 	return res, body, err
 }
