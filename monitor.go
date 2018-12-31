@@ -118,12 +118,14 @@ func (mon *AbstractMonitor) ClockStart(cfg *CachetMonitor, iface MonitorInterfac
 		mon.tick(iface)
 	}
 
-	initialIncident, err := mon.Get(cfg)
-	if err != nil{
-		logrus.Warn("could not fetch initial incident: %v", err)
-	}
-	if initialIncident != nil {
-		mon.incident = initialIncident
+	if cfg.Restarted {
+		initialIncident, err := mon.Get(cfg)
+		if err != nil{
+			logrus.Warn("could not fetch initial incident: %v", err)
+		}
+		if initialIncident != nil {
+			mon.incident = initialIncident
+		}
 	}
 
 	ticker := time.NewTicker(mon.Interval * time.Second)

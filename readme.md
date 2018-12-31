@@ -93,7 +93,7 @@ pro tip: run in background using `nohup cachet-monitor 2>&1 > /var/log/cachet-mo
 
 ```
 Usage:
-  cachet-monitor (-c PATH | --config PATH) [--log=LOGPATH] [--name=NAME] [--immediate]
+  cachet-monitor (-c PATH | --config PATH) [--log=LOGPATH] [--name=NAME] [--immediate] [--restarted]
   cachet-monitor -h | --help | --version
 
 Arguments:
@@ -110,6 +110,7 @@ Options:
   -h --help                      Show this screen.
   --version                      Show version
   --immediate                    Tick immediately (by default waits for first defined interval)
+  --restarted                    Get open incidents before start monitoring (if monitor died or restarted)
   
 Environment varaibles:
   CACHET_API      override API url from configuration

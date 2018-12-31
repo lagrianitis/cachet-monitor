@@ -40,14 +40,17 @@ Options:
   -h --help                      Show this screen.
   --version                      Show version
   --immediate                    Tick immediately (by default waits for first defined interval)
-  
+  --restarted                    Get open incidents before start monitoring (if monitor died or restarted
+
 Environment varaibles:
   CACHET_API      override API url from configuration
   CACHET_TOKEN    override API token from configuration
   CACHET_DEV      set to enable dev logging`
 
+var version string
+
 func main() {
-	arguments, _ := docopt.Parse(usage, nil, true, "cachet-monitor", false)
+	arguments, _ := docopt.Parse(usage, nil, true, version, false)
 
 	cfg, err := getConfiguration(arguments["--config"].(string))
 	if err != nil {
@@ -56,6 +59,10 @@ func main() {
 
 	if immediate, ok := arguments["--immediate"]; ok {
 		cfg.Immediate = immediate.(bool)
+	}
+
+	if restarted, ok := arguments["--restarted"]; ok{
+		cfg.Restarted = restarted.(bool)
 	}
 
 	if name := arguments["--name"]; name != nil {

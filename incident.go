@@ -21,7 +21,7 @@ type Incident struct {
 	ComponentStatus int `json:"component_status"`
 }
 
-
+//Get the last still open incident
 func (mon *AbstractMonitor) Get(cfg *CachetMonitor) (*Incident, error) {
 
 	requestType := "GET"
@@ -34,6 +34,7 @@ func (mon *AbstractMonitor) Get(cfg *CachetMonitor) (*Incident, error) {
 	if err := json.Unmarshal(body.Data, &data); err != nil {
 		return nil, fmt.Errorf("Cannot parse incident body: %v, %v", err, string(body.Data))
 	}
+	//filter out resolved incidents
 	openIncidents := make([]Incident, 0)
 	for _, i := range data {
 		if i.Status < 4 {
@@ -44,7 +45,6 @@ func (mon *AbstractMonitor) Get(cfg *CachetMonitor) (*Incident, error) {
 		return nil, nil
 	}
 	return &openIncidents[0], nil
-
 }
 
 // Send - Create or Update incident
